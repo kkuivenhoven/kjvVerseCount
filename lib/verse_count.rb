@@ -4,13 +4,11 @@ require 'open-uri'
 class KjvVerseCount
 	@wholeBible = Hash.new
 
-=begin
 	def initialize(name, chapter, verseTotal)
 		@name = name
 		@chapter = chapter
 		@verseTotal = verseTotal
 	end
-=end
 
 	def self.init
 		puts "inside init"
@@ -28,7 +26,32 @@ class KjvVerseCount
 		end
 	end
 
+	def self.getBooksOfBible
+		return @wholeBible.keys
+	end
+
+	def self.getNumberOfChapters(bookTitle)
+		return @wholeBible[bookTitle].last.keys
+	end
+
+	def self.getVerseCountForChapter(bookTitle, chapNum)
+		@wholeBible[bookTitle].each do |chapVerse|
+			if chapVerse.keys.first.to_i == chapNum
+				return chapVerse.values.first
+			end
+		end
+	end
+
+	def self.getTotalBookVerseCount
+		@allChapters = Hash.new
+		@wholeBible.each do |wb|
+			@allChapters[wb[0]] = {}
+			wb[1].each do |chapterVerseArray|
+				@allChapters[wb[0]].merge!(chapterVerseArray.keys.first => chapterVerseArray.values.first)
+			end
+		end
+		return @allChapters
+	end
+
 end
 
-KjvVerseCount.new
-KjvVerseCount.init
